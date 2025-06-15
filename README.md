@@ -1,30 +1,74 @@
-# Liquid Glass Generator
+# 🌊 Liquid Glass Generator
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+*A real-time WebGL shader implementation for creating authentic liquid glass effects*
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/johnas/v0-liquid-glass-generator)
 [![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/RIunPoehfXW)
+[![WebGL](https://img.shields.io/badge/WebGL-Powered-blue?style=for-the-badge&logo=webgl)](https://www.khronos.org/webgl/)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 
-## Overview
+## ✨ Features
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+### 🔬 **Real Physics Simulation**
+- **Authentic refraction** using Snell's law and mathematical optics
+- **Dynamic distortion** with real-time background warping
+- **Edge detection** for realistic glass boundaries
+- **Curvature modeling** for 3D glass surface simulation
 
-## Deployment
+### 🎮 **Interactive Controls**
+- **Refractive Index** - From air (1.0) to diamond (2.4)
+- **Blur Radius** - Control background blur intensity
+- **Distortion Strength** - Adjust refraction magnitude
+- **Curvature** - Shape the glass surface geometry
+- **Edge Sharpness** - Fine-tune boundary definition
+- **Glow & Shadow** - Realistic lighting effects
 
-Your project is live at:
+### 📱 **Mobile Optimized**
+- **Touch-friendly interface** with auto-animation
+- **Responsive design** that works on all devices
+- **Optimized performance** for mobile WebGL
+- **Gesture-free experience** on smaller screens
 
-**[https://vercel.com/johnas/v0-liquid-glass-generator](https://vercel.com/johnas/v0-liquid-glass-generator)**
+### 🎨 **Material Presets**
+- **Pure Water** - Crystal clear with subtle refraction
+- **Dense Glass** - Heavy optical distortion
+- **Liquid Crystal** - Smooth, flowing appearance
 
-## Build your app
+### 💻 **Developer Tools**
+- **CSS Export** - Get CSS approximations for production use
+- **Real-time preview** with instant parameter updates
+- **WebGL shader source** included for customization
+- **Copy-paste ready** code snippets
 
-Continue building your app on:
+## 🚀 Live Demo
 
-**[https://v0.dev/chat/projects/RIunPoehfXW](https://v0.dev/chat/projects/RIunPoehfXW)**
+**[Try it now →](https://vercel.com/johnas/v0-liquid-glass-generator)**
 
-## How It Works
+## 🛠️ Technology Stack
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+- **Next.js 15** - React framework with App Router
+- **WebGL** - Hardware-accelerated graphics rendering
+- **GLSL Shaders** - Custom fragment and vertex shaders
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **Radix UI** - Accessible component primitives
+
+## 📖 How It Works
+
+### WebGL Shader Pipeline
+
+1. **Background Texture Generation** - Creates complex test patterns
+2. **Vertex Processing** - Sets up screen-space quad
+3. **Fragment Shader Magic** - Applies physics-based refraction
+4. **Real-time Rendering** - 60fps interactive updates
+
+### Physics Implementation
+
+```glsl
+// Snell's Law Implementation
+float eta = 1.0 / u_refractiveIndex;
+vec2 refractVec = refract(incident, normal, eta);
+
+// Curvature-based distortion
+float curvature = pow(r, u_curvature);
+vec2 domeNormal = normalize(local) * curvature;

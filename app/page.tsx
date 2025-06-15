@@ -87,6 +87,7 @@ export default function LiquidGlassGenerator() {
   const mouseRef = useRef([400, 300])
   const [isPlaying, setIsPlaying] = useState(true)
   const [isWebGLReady, setIsWebGLReady] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   const updateConfig = useCallback((key: keyof LiquidGlassConfig, value: number | string | [number, number]) => {
     setConfig((prev) => ({ ...prev, [key]: value }))
@@ -399,7 +400,11 @@ export default function LiquidGlassGenerator() {
     gl.uniform1f(gl.getUniformLocation(program, "u_dpr"), dpr)
     gl.uniform2f(gl.getUniformLocation(program, "u_resolution"), canvas.width, canvas.height)
     gl.uniform2f(gl.getUniformLocation(program, "u_mouse"), mouseRef.current[0] * dpr, mouseRef.current[1] * dpr)
-    gl.uniform2f(gl.getUniformLocation(program, "u_size"), config.size[0] * dpr, config.size[1] * dpr)
+
+    // Mobile-optimized size adjustments
+    const mobileSize = isMobile ? [Math.min(config.size[0], 280), Math.min(config.size[1], 180)] : config.size
+
+    gl.uniform2f(gl.getUniformLocation(program, "u_size"), mobileSize[0] * dpr, mobileSize[1] * dpr)
     gl.uniform1f(gl.getUniformLocation(program, "u_refractiveIndex"), config.refractiveIndex)
     gl.uniform1f(gl.getUniformLocation(program, "u_blurRadius"), config.blurRadius)
     gl.uniform1f(gl.getUniformLocation(program, "u_distortionStrength"), config.distortionStrength)
@@ -422,9 +427,9 @@ export default function LiquidGlassGenerator() {
     if (isPlaying) {
       animationRef.current = requestAnimationFrame(render)
     }
-  }, [config, isPlaying])
+  }, [config, isPlaying, isMobile])
 
-  // Handle mouse movement
+  // Handle mouse movement and touch events
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -432,6 +437,63 @@ export default function LiquidGlassGenerator() {
     const rect = canvas.getBoundingClientRect()
     mouseRef.current = [e.clientX - rect.left, e.clientY - rect.top]
   }, [])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault() // Prevent scrolling
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const rect = canvas.getBoundingClientRect()
+    const touch = e.touches[0]
+    if (touch) {
+      mouseRef.current = [touch.clientX - rect.left, touch.clientY - rect.top]
+    }
+  }, [])
+
+  // Auto-animate position on mobile
+  const autoAnimateRef = useRef<number>()
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
+
+  // Auto-animate liquid glass position on mobile
+  useEffect(() => {
+    if (!isMobile || !isPlaying) return
+
+    const animate = () => {
+      const time = Date.now() * 0.001
+      const canvas = canvasRef.current
+      if (canvas) {
+        const centerX = canvas.clientWidth / 2
+        const centerY = canvas.clientHeight / 2
+        const radiusX = Math.min(canvas.clientWidth * 0.3, 150)
+        const radiusY = Math.min(canvas.clientHeight * 0.2, 100)
+
+        mouseRef.current = [centerX + Math.cos(time * 0.5) * radiusX, centerY + Math.sin(time * 0.3) * radiusY]
+      }
+
+      if (isPlaying) {
+        autoAnimateRef.current = requestAnimationFrame(animate)
+      }
+    }
+
+    if (isMobile) {
+      animate()
+    }
+
+    return () => {
+      if (autoAnimateRef.current) {
+        cancelAnimationFrame(autoAnimateRef.current)
+      }
+    }
+  }, [isMobile, isPlaying])
 
   // Initialize WebGL on mount
   useEffect(() => {
@@ -539,9 +601,9 @@ export default function LiquidGlassGenerator() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
           {/* Controls */}
-          <Card className="bg-gray-900/50 border-gray-800 backdrop-blur-sm">
+          <Card className="bg-gray-900/50 border-gray-800 backdrop-blur-sm order-2 lg:order-1">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <Settings className="w-5 h-5" />
@@ -725,7 +787,7 @@ export default function LiquidGlassGenerator() {
           </Card>
 
           {/* WebGL Preview */}
-          <div className="space-y-6">
+          <div className="space-y-6 order-1 lg:order-2">
             <Card className="bg-gray-900/50 border-gray-800 backdrop-blur-sm">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-white flex items-center gap-2">
@@ -745,8 +807,12 @@ export default function LiquidGlassGenerator() {
                 <div className="relative">
                   <canvas
                     ref={canvasRef}
-                    onMouseMove={handleMouseMove}
-                    className="w-full h-[500px] rounded-lg border border-gray-700 cursor-crosshair"
+                    onMouseMove={!isMobile ? handleMouseMove : undefined}
+                    onTouchMove={isMobile ? handleTouchMove : undefined}
+                    onTouchStart={isMobile ? handleTouchMove : undefined}
+                    className={`w-full rounded-lg border border-gray-700 ${
+                      isMobile ? "h-[400px] touch-none" : "h-[500px] cursor-crosshair"
+                    }`}
                     style={{ background: "transparent" }}
                   />
                   {!isWebGLReady && (
@@ -755,7 +821,7 @@ export default function LiquidGlassGenerator() {
                     </div>
                   )}
                   <div className="absolute bottom-4 left-4 text-white/70 text-xs font-mono bg-black/50 px-2 py-1 rounded">
-                    Move mouse to control liquid glass position
+                    {isMobile ? "Auto-animating liquid glass effect" : "Move mouse to control liquid glass position"}
                   </div>
                   <div className="absolute top-4 right-4 text-white/70 text-xs font-mono bg-black/50 px-2 py-1 rounded">
                     η: {config.refractiveIndex.toFixed(2)} | Distortion: {(config.distortionStrength * 1000).toFixed(0)}

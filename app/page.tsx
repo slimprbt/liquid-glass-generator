@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Copy, Palette, Settings, Zap, Play, Pause } from "lucide-react"
+import { Copy, Palette, Settings, Zap, Play, Pause, Github } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
 
 interface LiquidGlassConfig {
@@ -794,14 +794,24 @@ export default function LiquidGlassGenerator() {
                   <Palette className="w-5 h-5" />
                   Real-Time WebGL Preview
                 </CardTitle>
-                <Button
-                  size="sm"
-                  onClick={() => setIsPlaying(!isPlaying)}
-                  className="bg-gray-800 hover:bg-gray-700 text-white border-gray-700"
-                >
-                  {isPlaying ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
-                  {isPlaying ? "Pause" : "Play"}
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => window.open("https://github.com/gdjohn4s/liquid-glass-generator", "_blank")}
+                    className="bg-gray-800 hover:bg-gray-700 text-white border-gray-700"
+                  >
+                    <Github className="w-4 h-4 mr-2" />
+                    GitHub
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => setIsPlaying(!isPlaying)}
+                    className="bg-gray-800 hover:bg-gray-700 text-white border-gray-700"
+                  >
+                    {isPlaying ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
+                    {isPlaying ? "Pause" : "Play"}
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="relative">

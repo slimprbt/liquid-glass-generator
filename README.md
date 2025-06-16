@@ -40,10 +40,6 @@
 - **WebGL shader source** included for customization
 - **Copy-paste ready** code snippets
 
-## 🚀 Live Demo
-
-**[Try it now →](https://vercel.com/johnas/v0-liquid-glass-generator)**
-
 ## 🛠️ Technology Stack
 
 - **Next.js 15** - React framework with App Router

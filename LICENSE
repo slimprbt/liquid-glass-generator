@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2025 Liquid Glass Generator
+Copyright (c) 2025 gdjohn4s
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+### Third-Party Code Attribution
+
+This project incorporates code derived from or inspired by third-party works, released under compatible licenses.
+Specifically, certain portions of this software are based on work by **Andre Kiste**, originally released under the MIT License.

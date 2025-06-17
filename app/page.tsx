@@ -1,3 +1,10 @@
+/*
+ * This file contains small portions of code originally developed by Andre Kiste,
+ * licensed under the MIT License.
+ * For full license details, please refer to the THIRD-PARTY-LICENSES.md file
+ * in the root of this repository.
+ */
+
 "use client"
 
 import type React from "react"

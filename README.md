@@ -7,6 +7,9 @@
 [![WebGL](https://img.shields.io/badge/WebGL-Powered-blue?style=for-the-badge&logo=webgl)](https://www.khronos.org/webgl/)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 
+### Try here
+[Public Demo](https://v0-liquid-glass-generator.vercel.app)
+
 ## ✨ Features
 
 ### 🔬 **Real Physics Simulation**
